@@ -1,0 +1,38 @@
+server:
+  port: 80
+
+spring:
+  profiles:
+    include: prod
+
+  datasource:
+    url:
+    username:
+    password:
+    driver-class-name:
+
+  jpa:
+    hibernate:
+      ddl-auto:
+    properties:
+      hibernate:
+        format_sql:
+        dialect:
+  #    show-sql: true
+
+  jwt:
+    header:
+    secret:
+    access-token-validity-in-seconds :
+    refresh-token-validity-in-seconds :
+
+  security:
+    password:
+      salt:
+
+logging.level:
+  org.hibernate.SQL:
+
+aes:
+  secret-key:
+
