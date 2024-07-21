@@ -1,5 +1,6 @@
-package com.weolbu.assignment.member.domain;
+package com.weolbu.assignment.member.domain.repository;
 
+import com.weolbu.assignment.member.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
