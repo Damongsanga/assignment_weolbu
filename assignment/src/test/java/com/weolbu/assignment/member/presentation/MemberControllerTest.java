@@ -9,7 +9,7 @@ import com.weolbu.assignment.auth.dto.JwtToken;
 import com.weolbu.assignment.global.exception.BaseException;
 import com.weolbu.assignment.member.application.MemberService;
 import com.weolbu.assignment.member.domain.Member;
-import com.weolbu.assignment.member.domain.MemberRepository;
+import com.weolbu.assignment.member.domain.repository.MemberRepository;
 import com.weolbu.assignment.member.domain.MemberType;
 import com.weolbu.assignment.member.dto.LoginRequest;
 import com.weolbu.assignment.member.dto.LoginResponse;
