@@ -25,6 +25,7 @@ public class Course extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
     private String title;
 
     @Column(nullable = false)
@@ -44,11 +45,11 @@ public class Course extends BaseEntity {
     private List<CourseMember> students = new ArrayList<>();
 
     @Builder
-    public Course(String title, Integer maxStudents, Integer currentStudents, Integer price, Member instructor) {
+    public Course(String title, Integer price, Integer currentStudents, Integer maxStudents, Member instructor) {
         this.title = title;
-        this.maxStudents = maxStudents;
-        this.currentStudents = currentStudents;
         this.price = price;
+        this.currentStudents = currentStudents;
+        this.maxStudents = maxStudents;
         this.instructor = instructor;
     }
 

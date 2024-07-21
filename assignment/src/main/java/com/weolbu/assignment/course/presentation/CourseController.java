@@ -35,9 +35,9 @@ public class CourseController {
 
     @GetMapping()
     public ResponseEntity<Page<CourseInfoDto>> getCourses(
-            @NotNull @PathVariable CourseFetchType type,
-            @NotNull @PathVariable CourseOrder order,
-            @PageableDefault(size = 20) Pageable pageable
+            @NotNull @RequestParam CourseFetchType type,
+            @NotNull @RequestParam CourseOrder order,
+            @PageableDefault(page = 0, size = 20) Pageable pageable
     ){
         return ResponseEntity.ok(courseService.getCourses(type, order, pageable));
     }

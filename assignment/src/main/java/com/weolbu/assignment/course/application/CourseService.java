@@ -4,7 +4,7 @@ import com.weolbu.assignment.auth.application.AuthService;
 import com.weolbu.assignment.course.domain.Course;
 import com.weolbu.assignment.course.domain.CourseFetchType;
 import com.weolbu.assignment.course.domain.CourseOrder;
-import com.weolbu.assignment.course.domain.CourseRepository;
+import com.weolbu.assignment.course.domain.repository.CourseRepository;
 import com.weolbu.assignment.course.dto.*;
 
 import com.weolbu.assignment.global.exception.BaseException;
@@ -72,9 +72,9 @@ public class CourseService {
         for(long courseId : request.enroll()){
             try{
                 courseEnrollmentProcessor.processEnrollment(courseId, member);
-                results.add(new EnrollmentResult(courseId, true));
+                results.add(new EnrollmentResult(courseId, true, "성공적으로 수강 신청되었습니다."));
             } catch (BaseException e){
-                results.add(new EnrollmentResult(courseId, false));
+                results.add(new EnrollmentResult(courseId, false, e.getMessage()));
                 isSuccess = false;
             }
         }

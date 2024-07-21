@@ -48,9 +48,9 @@ public class Member extends BaseEntity implements UserDetails {
     private List<Course> managingCourses = new ArrayList<>();
 
     @Builder
-    public Member(String password, String name, String email, MemberType type) {
-        this.password = password;
+    public Member(String name, String password, String email, MemberType type) {
         this.name = name;
+        this.password = password;
         this.email = email;
         this.type = type;
     }
