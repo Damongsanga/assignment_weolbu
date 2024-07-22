@@ -44,7 +44,7 @@ public class Member extends BaseEntity implements UserDetails {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<CourseMember> signedCourse = new ArrayList<>();
 
-    @OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "instructor", cascade = CascadeType.PERSIST)
     private List<Course> managingCourses = new ArrayList<>();
 
     @Builder
