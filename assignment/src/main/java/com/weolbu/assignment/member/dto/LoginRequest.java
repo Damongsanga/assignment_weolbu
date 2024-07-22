@@ -1,6 +1,5 @@
 package com.weolbu.assignment.member.dto;
 
-import com.weolbu.assignment.member.domain.MemberType;
 import jakarta.validation.constraints.*;
 
 public record LoginRequest (

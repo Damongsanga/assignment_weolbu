@@ -32,11 +32,9 @@ public class SecurityConfig {
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final ObjectMapper objectMapper;
 
-    // Spring Security 7.0 부터 삭제될 예정으로, 체이닝 방식에서 람다식으로 변경필요
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                // JWT를 사용하기 때문에 세션을 사용하지 않음
                 .sessionManagement(sm -> sm
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
@@ -45,8 +43,8 @@ public class SecurityConfig {
                         CorsConfiguration config = new CorsConfiguration();
 
                         config.setAllowCredentials(true);
-                        config.setAllowedOrigins(List.of("http://localhost:8080", "http://localhost:80"));
-                        config.setAllowedMethods(List.of("GET", "POST", "PATCH", "OPTIONS"));
+                        config.setAllowedOrigins(List.of("http://localhost:8080"));
+                        config.setAllowedMethods(List.of("GET", "POST", "OPTIONS"));
                         config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
 
                         return config;
@@ -60,9 +58,7 @@ public class SecurityConfig {
                     ex.authenticationEntryPoint(jwtAuthenticationEntryPoint)
                             .accessDeniedHandler(jwtAccessDeniedHandler);
                 })
-                // JWT 인증을 위하여 직접 구현한 필터를 UsernamePasswordAuthenticationFilter 전에 실행
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenManager), UsernamePasswordAuthenticationFilter.class)
-                // JwtException 핸들링을 위한 Exception 필터
                 .addFilterBefore(new JwtExceptionFilter(objectMapper), JwtAuthenticationFilter.class)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)

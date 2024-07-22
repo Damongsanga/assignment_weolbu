@@ -2,6 +2,7 @@ package com.weolbu.assignment.auth;
 
 import com.weolbu.assignment.auth.dto.JwtToken;
 import com.weolbu.assignment.global.exception.BaseException;
+import com.weolbu.assignment.global.exception.errorcode.CustomErrorCode;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -29,6 +30,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.weolbu.assignment.global.exception.errorcode.CustomErrorCode.NO_AUTHORIZATION;
+import static com.weolbu.assignment.global.exception.errorcode.CustomErrorCode.NO_REFRESH_TOKEN;
 
 @Slf4j
 @Component
@@ -140,7 +142,7 @@ public class JwtTokenManager {
 
     public String resolveRefreshToken(HttpServletRequest req){
         Cookie[] cookies = req.getCookies();
-        if (cookies == null) return null;
+        if (cookies == null) throw new BaseException(NO_REFRESH_TOKEN);
 
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals("refreshToken")){

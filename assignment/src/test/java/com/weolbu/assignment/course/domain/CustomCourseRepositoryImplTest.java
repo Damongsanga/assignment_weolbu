@@ -147,7 +147,7 @@ class CustomCourseRepositoryImplTest {
             Pageable pageable = PageRequest.of(0,4);
 
             // when
-            Page<CourseInfoDto> result = customCourseRepository.findNotSignedCourses(student.getId(), CourseOrder.LATEST, pageable);
+            Page<CourseInfoDto> result = customCourseRepository.findUnenrolledCourses(student.getId(), CourseOrder.LATEST, pageable);
             List<String> courseTitles = result.getContent().stream().map(CourseInfoDto::getTitle).toList();
 
             // then
@@ -164,7 +164,7 @@ class CustomCourseRepositoryImplTest {
             Pageable pageable = PageRequest.of(0,4);
 
             // when
-            Page<CourseInfoDto> result = customCourseRepository.findNotSignedCourses(student.getId(), CourseOrder.RATE, pageable);
+            Page<CourseInfoDto> result = customCourseRepository.findUnenrolledCourses(student.getId(), CourseOrder.RATE, pageable);
             List<String> courseTitles = result.getContent().stream().map(CourseInfoDto::getTitle).toList();
 
             // then
@@ -181,7 +181,7 @@ class CustomCourseRepositoryImplTest {
             Pageable pageable = PageRequest.of(0,4);
 
             // when
-            Page<CourseInfoDto> result = customCourseRepository.findNotSignedCourses(student.getId(), CourseOrder.CURRENT, pageable);
+            Page<CourseInfoDto> result = customCourseRepository.findUnenrolledCourses(student.getId(), CourseOrder.CURRENT, pageable);
             List<String> courseTitles = result.getContent().stream().map(CourseInfoDto::getTitle).toList();
 
             // then
@@ -202,7 +202,7 @@ class CustomCourseRepositoryImplTest {
             Pageable pageable = PageRequest.of(0,4);
 
             // when
-            Page<CourseInfoDto> result = customCourseRepository.findSignedCourse(student.getId(), CourseOrder.LATEST, pageable);
+            Page<CourseInfoDto> result = customCourseRepository.findEnrolledCourses(student.getId(), CourseOrder.LATEST, pageable);
             List<String> courseTitles = result.getContent().stream().map(CourseInfoDto::getTitle).toList();
 
             // then
@@ -219,7 +219,7 @@ class CustomCourseRepositoryImplTest {
             Pageable pageable = PageRequest.of(0,4);
 
             // when
-            Page<CourseInfoDto> result = customCourseRepository.findSignedCourse(student.getId(), CourseOrder.RATE, pageable);
+            Page<CourseInfoDto> result = customCourseRepository.findEnrolledCourses(student.getId(), CourseOrder.RATE, pageable);
             List<String> courseTitles = result.getContent().stream().map(CourseInfoDto::getTitle).toList();
 
             // then
@@ -236,7 +236,7 @@ class CustomCourseRepositoryImplTest {
             Pageable pageable = PageRequest.of(0,4);
 
             // when
-            Page<CourseInfoDto> result = customCourseRepository.findSignedCourse(student.getId(), CourseOrder.CURRENT, pageable);
+            Page<CourseInfoDto> result = customCourseRepository.findEnrolledCourses(student.getId(), CourseOrder.CURRENT, pageable);
             List<String> courseTitles = result.getContent().stream().map(CourseInfoDto::getTitle).toList();
 
             // then
@@ -257,7 +257,7 @@ class CustomCourseRepositoryImplTest {
             Pageable pageable = PageRequest.of(0,4);
 
             // when
-            Page<CourseInfoDto> result = customCourseRepository.findManagingCourse(instructor.getId(), CourseOrder.LATEST, pageable);
+            Page<CourseInfoDto> result = customCourseRepository.findManagingCourses(instructor.getId(), CourseOrder.LATEST, pageable);
             List<String> courseTitles = result.getContent().stream().map(CourseInfoDto::getTitle).toList();
 
             // then
@@ -274,7 +274,7 @@ class CustomCourseRepositoryImplTest {
             Pageable pageable = PageRequest.of(0,4);
 
             // when
-            Page<CourseInfoDto> result = customCourseRepository.findManagingCourse(instructor.getId(), CourseOrder.RATE, pageable);
+            Page<CourseInfoDto> result = customCourseRepository.findManagingCourses(instructor.getId(), CourseOrder.RATE, pageable);
             List<String> courseTitles = result.getContent().stream().map(CourseInfoDto::getTitle).toList();
 
             // then
@@ -291,7 +291,7 @@ class CustomCourseRepositoryImplTest {
             Pageable pageable = PageRequest.of(0,4);
 
             // when
-            Page<CourseInfoDto> result = customCourseRepository.findManagingCourse(instructor.getId(), CourseOrder.CURRENT, pageable);
+            Page<CourseInfoDto> result = customCourseRepository.findManagingCourses(instructor.getId(), CourseOrder.CURRENT, pageable);
             List<String> courseTitles = result.getContent().stream().map(CourseInfoDto::getTitle).toList();
 
             // then

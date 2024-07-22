@@ -28,17 +28,17 @@ public class Course extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String title;
 
-    @Column(nullable = false)
+    @Column(name = "max_students", nullable = false)
     private Integer maxStudents;
 
-    @Column(nullable = false)
+    @Column(name = "current_students", nullable = false)
     private Integer currentStudents;
 
     @Column(nullable = false)
     private Integer price;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
+    @JoinColumn(name = "instructor_id", nullable = false)
     private Member instructor;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)

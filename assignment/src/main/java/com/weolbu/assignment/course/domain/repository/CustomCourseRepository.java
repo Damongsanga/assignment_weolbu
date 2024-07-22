@@ -7,9 +7,9 @@ import org.springframework.data.domain.Pageable;
 
 public interface CustomCourseRepository {
 
-    Page<CourseInfoDto> findNotSignedCourses(Long memberId, CourseOrder courseOrder, Pageable pageable);
-    Page<CourseInfoDto> findSignedCourse(Long memberId, CourseOrder courseOrder, Pageable pageable);
-    Page<CourseInfoDto> findManagingCourse(Long memberId, CourseOrder courseOrder, Pageable pageable);
+    Page<CourseInfoDto> findUnenrolledCourses(Long memberId, CourseOrder courseOrder, Pageable pageable);
+    Page<CourseInfoDto> findEnrolledCourses(Long memberId, CourseOrder courseOrder, Pageable pageable);
+    Page<CourseInfoDto> findManagingCourses(Long memberId, CourseOrder courseOrder, Pageable pageable);
 
     Page<CourseInfoDto> findAllCourses(CourseOrder order, Pageable pageable);
 }

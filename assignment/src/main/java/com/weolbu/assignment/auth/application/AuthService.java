@@ -11,7 +11,8 @@ import org.springframework.stereotype.Service;
 public class AuthService {
     public Long findMemberId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return (Long) authentication.getPrincipal();
+        UserDetails userDetail = (UserDetails) authentication.getPrincipal();
+        return Long.parseLong(userDetail.getUsername());
     }
 }
 

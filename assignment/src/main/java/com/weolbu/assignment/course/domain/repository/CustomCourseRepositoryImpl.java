@@ -31,7 +31,7 @@ public class CustomCourseRepositoryImpl implements CustomCourseRepository{
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<CourseInfoDto> findNotSignedCourses(Long memberId, CourseOrder order, Pageable pageable) {
+    public Page<CourseInfoDto> findUnenrolledCourses(Long memberId, CourseOrder order, Pageable pageable) {
         QCourseMember subCourseMember = new QCourseMember("subCourseMember");
         JPQLQuery<Long> subQuery = JPAExpressions.select(subCourseMember.course.id)
                 .from(subCourseMember)
@@ -67,7 +67,7 @@ public class CustomCourseRepositoryImpl implements CustomCourseRepository{
     }
 
     @Override
-    public Page<CourseInfoDto> findSignedCourse(Long memberId, CourseOrder order, Pageable pageable) {
+    public Page<CourseInfoDto> findEnrolledCourses(Long memberId, CourseOrder order, Pageable pageable) {
         JPAQuery<CourseInfoDto> query = jpaQueryFactory.select(
                         Projections.constructor(
                                 CourseInfoDto.class,
@@ -102,7 +102,7 @@ public class CustomCourseRepositoryImpl implements CustomCourseRepository{
     }
 
     @Override
-    public Page<CourseInfoDto> findManagingCourse(Long memberId, CourseOrder order, Pageable pageable) {
+    public Page<CourseInfoDto> findManagingCourses(Long memberId, CourseOrder order, Pageable pageable) {
         JPAQuery<CourseInfoDto> query = jpaQueryFactory.select(
                         Projections.constructor(
                                 CourseInfoDto.class,
