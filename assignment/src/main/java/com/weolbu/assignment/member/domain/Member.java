@@ -2,7 +2,7 @@ package com.weolbu.assignment.member.domain;
 
 import com.weolbu.assignment.course.domain.Course;
 import com.weolbu.assignment.course.domain.CourseMember;
-import com.weolbu.assignment.global.config.BaseEntity;
+import com.weolbu.assignment.global.BaseEntity;
 import com.weolbu.assignment.member.dto.MemberJoinRequest;
 import jakarta.persistence.*;
 import lombok.Builder;

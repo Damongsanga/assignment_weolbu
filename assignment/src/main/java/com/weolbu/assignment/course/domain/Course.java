@@ -1,7 +1,7 @@
 package com.weolbu.assignment.course.domain;
 
 import com.weolbu.assignment.course.dto.CourseCreateRequest;
-import com.weolbu.assignment.global.config.BaseEntity;
+import com.weolbu.assignment.global.BaseEntity;
 import com.weolbu.assignment.global.exception.BaseException;
 import com.weolbu.assignment.member.domain.Member;
 import com.weolbu.assignment.member.domain.MemberType;

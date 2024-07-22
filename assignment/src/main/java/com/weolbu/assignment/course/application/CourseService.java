@@ -75,15 +75,15 @@ public class CourseService {
     public EnrollCourseResponse enrollCourse(CourseEnrollRequest request) {
         Long memberId = authService.findMemberId();
         Member member = memberService.findById(memberId);
-        List<EnrollmentResult> results = new ArrayList<>();
+        List<EnrollResult> results = new ArrayList<>();
         boolean isSuccess = true;
 
         for(long courseId : request.enroll()){
             try{
                 courseEnrollmentProcessor.processEnrollment(courseId, member);
-                results.add(new EnrollmentResult(courseId, true, "성공적으로 수강 신청되었습니다."));
+                results.add(new EnrollResult(courseId, true, "성공적으로 수강 신청되었습니다."));
             } catch (BaseException e){
-                results.add(new EnrollmentResult(courseId, false, e.getMessage()));
+                results.add(new EnrollResult(courseId, false, e.getMessage()));
                 isSuccess = false;
             }
         }

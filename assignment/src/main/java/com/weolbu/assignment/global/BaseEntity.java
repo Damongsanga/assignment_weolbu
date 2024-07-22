@@ -1,4 +1,4 @@
-package com.weolbu.assignment.global.config;
+package com.weolbu.assignment.global;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

@@ -51,7 +51,6 @@ public class JwtTokenManager {
         this.refreshTokenValidityInSeconds = refreshTokenValidityInSeconds;
     }
 
-    // Member 정보를 가지고 AccessToken, RefreshToken을 생성하는 메서드
     public JwtToken generateToken(Authentication authentication) {
 
         Claims claims = Jwts.claims().setSubject(authentication.getName());
@@ -83,12 +82,7 @@ public class JwtTokenManager {
         return new JwtToken(TOKEN_PREFIX, accessToken, refreshToken);
     }
 
-
-
-
-    // Jwt 토큰을 복호화하여 토큰에 들어있는 정보를 꺼내는 메서드
     public Authentication getAuthentication(String accessToken) {
-        // Jwt 토큰 복호화 (Claim이 권한 정보)
         Claims claims = parseClaims(accessToken);
 
         if (claims.get("type") == null) {
@@ -106,20 +100,18 @@ public class JwtTokenManager {
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 
-    // 토큰 정보를 검증하는 메서드
     public boolean validateToken(String accessToken) {
         try {
-            log.debug("accessToken : {}", accessToken);
             Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
                     .parseClaimsJws(accessToken);
             return true;
         }catch (ExpiredJwtException e) { // access token이 expire될 시에 바로 reissue로 redirect
-            log.info("Expired JWT Token", e);
+            log.error("Expired JWT Token", e);
             return false;
         } catch (Exception e) {
-            log.info("Invalid JWT Token", e);
+            log.error("Invalid JWT Token", e);
             throw new JwtException("Invalid JWT Token");
         }
     }
@@ -165,7 +157,7 @@ public class JwtTokenManager {
             return Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
-                    .parseClaimsJws(token) // JWT 토큰 검증과 파싱 모두 수행
+                    .parseClaimsJws(token)
                     .getBody();
         } catch (ExpiredJwtException e) {
             return e.getClaims();

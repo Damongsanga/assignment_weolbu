@@ -4,7 +4,7 @@ import java.util.List;
 
 public record EnrollCourseResponse (
         boolean isSuccess,
-        List<EnrollmentResult> detail
+        List<EnrollResult> detail
 ){
 
 }

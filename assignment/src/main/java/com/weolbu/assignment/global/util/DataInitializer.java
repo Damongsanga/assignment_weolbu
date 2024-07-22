@@ -41,7 +41,7 @@ public class DataInitializer implements CommandLineRunner {
     public void run(String... args) {
 
         if (!isEnabled) return;
-        System.out.println("running");
+        if (memberRepository.existsByEmail("student@email.com")) return;
 
         Member testMember = memberRepository.save(new Member("학생", passwordEncoder.encode("Password"+salt), "student@email.com", MemberType.STUDENT));
 
