@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:tcp://localhost/~/mem:db;MODE=MYSQL
-    username: weolbu
-    password: weolbu5678
+    url: jdbc:h2:~/mem:testdb;MODE=MYSQL
+    username: test
+    password:
 
   h2:
     console:
@@ -17,7 +17,6 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.H2Dialect
-      # show-sql: true
 
   jwt:
     header: Authorization

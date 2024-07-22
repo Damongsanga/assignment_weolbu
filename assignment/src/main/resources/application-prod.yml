@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:tcp://localhost/~/mem:db;MODE=MYSQL
+    url: jdbc:h2:~/mem:db;MODE=MYSQL
     username: weolbu
     password: weolbu5678
 
@@ -12,12 +12,11 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: create # 운영 환경에서 validate로 변경 필요
     properties:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.MySQL8Dialect
-      # show-sql: true
 
   jwt:
     header: Authorization

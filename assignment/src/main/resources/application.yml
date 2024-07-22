@@ -1,5 +1,5 @@
 server:
-  port: 80
+  port: 8080
 
 spring:
   profiles:
@@ -18,7 +18,6 @@ spring:
       hibernate:
         format_sql:
         dialect:
-  #    show-sql: true
 
   jwt:
     header:
@@ -36,3 +35,6 @@ logging.level:
 aes:
   secret-key:
 
+app:
+  data-initializer:
+    enabled:
