@@ -55,8 +55,8 @@ public class CourseService {
         Page<CourseInfoDto> courseDtos = Page.empty();
         switch (type) {
             case ALL -> courseDtos = courseRepository.findAllCourses(order, pageable);
-            case UNSIGNED -> courseDtos = courseRepository.findNotSignedCourses(memberId, order, pageable);
-            case SIGNED -> courseDtos = courseRepository.findSignedCourse(memberId, order, pageable);
+            case UNENROLLED -> courseDtos = courseRepository.findUnenrolledCourses(memberId, order, pageable);
+            case ENROLLED -> courseDtos = courseRepository.findEnrolledCourses(memberId, order, pageable);
             case MANAGING -> {
 
                 Member member = memberService.findById(memberId);
@@ -64,7 +64,7 @@ public class CourseService {
                     throw new BaseException(NOT_INSTRUCTOR);
                 }
 
-                courseDtos = courseRepository.findManagingCourse(memberId, order, pageable);
+                courseDtos = courseRepository.findManagingCourses(memberId, order, pageable);
             }
         }
 

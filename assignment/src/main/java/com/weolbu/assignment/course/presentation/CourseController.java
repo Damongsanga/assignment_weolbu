@@ -26,17 +26,16 @@ public class CourseController {
     private final CourseService courseService;
 
     @PostMapping()
-    public ResponseEntity<Void> createCourse(
+    public ResponseEntity<Long> createCourse(
             @Valid @RequestBody CourseCreateRequest request
     ){
-        courseService.createCourse(request);
-        return ResponseEntity.status(CREATED).build();
+        return ResponseEntity.status(CREATED).body(courseService.createCourse(request));
     }
 
     @GetMapping()
     public ResponseEntity<Page<CourseInfoDto>> getCourses(
-            @RequestParam(defaultValue = "UNSIGNED") CourseFetchType type,
-            @NotNull @RequestParam CourseOrder order,
+            @RequestParam(defaultValue = "UNENROLLED") CourseFetchType type,
+            @RequestParam(defaultValue = "LATEST") CourseOrder order,
             @PageableDefault(page = 0, size = 20) Pageable pageable
     ){
         return ResponseEntity.ok(courseService.getCourses(type, order, pageable));
