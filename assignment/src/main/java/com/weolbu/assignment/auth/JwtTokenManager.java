@@ -142,7 +142,7 @@ public class JwtTokenManager {
 
     public String resolveRefreshToken(HttpServletRequest req){
         Cookie[] cookies = req.getCookies();
-        if (cookies == null) throw new BaseException(NO_REFRESH_TOKEN);
+        if (cookies == null) return null;
 
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals("refreshToken")){

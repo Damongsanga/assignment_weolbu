@@ -1,5 +1,6 @@
 package com.weolbu.assignment.auth;
 
+import com.weolbu.assignment.global.exception.BaseException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +12,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+
+import static com.weolbu.assignment.global.exception.errorcode.CustomErrorCode.NO_REFRESH_TOKEN;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -29,12 +32,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (jwtTokenManager.validateToken(accessToken)) {
                 this.setAuthentication(accessToken);
             }
-            else if (!jwtTokenManager.validateToken(accessToken) && refreshToken != null){
+            else if (refreshToken != null){
                 if (jwtTokenManager.validateToken(refreshToken)){
                     String newAccessToken = jwtTokenManager.generateNewAccessToken(refreshToken);
                     response.setHeader("authorization", "bearer "+ accessToken);
                     this.setAuthentication(newAccessToken);
                 }
+            }
+            else {
+                throw new BaseException(NO_REFRESH_TOKEN);
             }
         }
 
