@@ -54,25 +54,25 @@ class CustomCourseRepositoryImplTest {
 
     @BeforeEach
     void init(){
-        Member student = new Member("학생","Password","student@email.com", MemberType.STUDENT);
-        Member instructor = new Member("강사", "Password", "instructor@email.com",MemberType.INSTRUCTOR);
-        Member instructor2 = new Member("강사2", "Password", "instructor2@email.com",MemberType.INSTRUCTOR);
+        Member student = new Member("학생","Password","student_test@email.com", MemberType.STUDENT);
+        Member instructor = new Member("강사", "Password", "instructor_test@email.com",MemberType.INSTRUCTOR);
+        Member instructor2 = new Member("강사2", "Password", "instructor2_test@email.com",MemberType.INSTRUCTOR);
 
         em.persist(student);
         em.persist(instructor);
         em.persist(instructor2);
 
         List<Course> courses = Arrays.asList(
-                new Course("강의1", 20000, 10, 30, instructor),
-                new Course("강의2", 20000, 2, 10, instructor),
-                new Course("강의3", 20000, 8, 8, instructor),
-                new Course("강의4", 20000, 2, 100, instructor),
-                new Course("강의5", 20000, 1, 50, instructor),
-                new Course("강의6", 20000, 1, 50, instructor2),
-                new Course("강의7", 20000, 2, 100, instructor2),
-                new Course("강의8", 20000, 8, 8, instructor2),
-                new Course("강의9", 20000, 2, 10, instructor2),
-                new Course("강의10", 20000, 10, 30, instructor2)
+                new Course("test_강의1", 20000, 10, 30, instructor),
+                new Course("test_강의2", 20000, 2, 10, instructor),
+                new Course("test_강의3", 20000, 8, 8, instructor),
+                new Course("test_강의4", 20000, 2, 100, instructor),
+                new Course("test_강의5", 20000, 1, 50, instructor),
+                new Course("test_강의6", 20000, 1, 50, instructor2),
+                new Course("test_강의7", 20000, 2, 100, instructor2),
+                new Course("test_강의8", 20000, 8, 8, instructor2),
+                new Course("test_강의9", 20000, 2, 10, instructor2),
+                new Course("test_강의10", 20000, 10, 30, instructor2)
         );
         courses.forEach(em::persist);
 
@@ -85,9 +85,58 @@ class CustomCourseRepositoryImplTest {
 
 
     @Test
+    void 전체_강의를_최신순으로_조회할_수_있다(){
+        // given
+        Pageable pageable = PageRequest.of(0,4);
+
+        // when
+        Page<CourseInfoDto> result = customCourseRepository.findAllCourses(CourseOrder.LATEST, pageable);
+        List<String> courseTitles = result.getContent().stream().map(CourseInfoDto::getTitle).toList();
+
+        // then
+        assertThat(result).isNotNull();
+        assertThat(result.getTotalElements()).isEqualTo(10);
+        assertThat(result.getNumberOfElements()).isEqualTo(4);
+        assertThat(courseTitles).containsExactly("test_강의10", "test_강의9", "test_강의8", "test_강의7");
+    }
+
+    @Test
+    void 전체_강의를_인기순으로_조회할_수_있다(){
+        // given
+        Pageable pageable = PageRequest.of(0,4);
+
+        // when
+        Page<CourseInfoDto> result = customCourseRepository.findAllCourses(CourseOrder.RATE, pageable);
+        List<String> courseTitles = result.getContent().stream().map(CourseInfoDto::getTitle).toList();
+
+        // then
+        assertThat(result).isNotNull();
+        assertThat(result.getTotalElements()).isEqualTo(10);
+        assertThat(result.getNumberOfElements()).isEqualTo(4);
+        assertThat(courseTitles).containsExactly("test_강의8", "test_강의3", "test_강의10", "test_강의1");
+    }
+
+    @Test
+    void 전체_강의를_학생수_순으로_조회할_수_있다(){
+        // given
+        Pageable pageable = PageRequest.of(0,4);
+
+        // when
+        Page<CourseInfoDto> result = customCourseRepository.findAllCourses(CourseOrder.CURRENT, pageable);
+        List<String> courseTitles = result.getContent().stream().map(CourseInfoDto::getTitle).toList();
+
+        // then
+        assertThat(result).isNotNull();
+        assertThat(result.getTotalElements()).isEqualTo(10);
+        assertThat(result.getNumberOfElements()).isEqualTo(4);
+        assertThat(courseTitles).containsExactly("test_강의10", "test_강의1", "test_강의8", "test_강의3");
+    }
+
+
+    @Test
     void 자신이_신청하지_않은_강의를_최신순으로_조회할_수_있다(){
         // given
-        Member student = memberRepository.findByEmail("student@email.com").get();
+        Member student = memberRepository.findByEmail("student_test@email.com").get();
         Pageable pageable = PageRequest.of(0,4);
 
         // when
@@ -98,13 +147,13 @@ class CustomCourseRepositoryImplTest {
         assertThat(result).isNotNull();
         assertThat(result.getTotalElements()).isEqualTo(5);
         assertThat(result.getNumberOfElements()).isEqualTo(4);
-        assertThat(courseTitles).containsExactly("강의6", "강의4", "강의3", "강의2");
+        assertThat(courseTitles).containsExactly("test_강의6", "test_강의4", "test_강의3", "test_강의2");
     }
 
     @Test
     void 자신이_신청하지_않은_강의를_인기순으로_조회할_수_있다(){
         // given
-        Member student = memberRepository.findByEmail("student@email.com").get();
+        Member student = memberRepository.findByEmail("student_test@email.com").get();
         Pageable pageable = PageRequest.of(0,4);
 
         // when
@@ -115,30 +164,30 @@ class CustomCourseRepositoryImplTest {
         assertThat(result).isNotNull();
         assertThat(result.getTotalElements()).isEqualTo(5);
         assertThat(result.getNumberOfElements()).isEqualTo(4);
-        assertThat(courseTitles).containsExactly("강의3", "강의1", "강의2", "강의6");
+        assertThat(courseTitles).containsExactly("test_강의3", "test_강의1", "test_강의2", "test_강의6");
     }
 
     @Test
     void 자신이_신청하지_않은_강의를_학생수_순으로_조회할_수_있다(){
         // given
-        Member student = memberRepository.findByEmail("student@email.com").get();
+        Member student = memberRepository.findByEmail("student_test@email.com").get();
         Pageable pageable = PageRequest.of(0,4);
 
         // when
-        Page<CourseInfoDto> result = customCourseRepository.findNotSignedCourses(student.getId(), CourseOrder.CURRENTSTUDENTS, pageable);
+        Page<CourseInfoDto> result = customCourseRepository.findNotSignedCourses(student.getId(), CourseOrder.CURRENT, pageable);
         List<String> courseTitles = result.getContent().stream().map(CourseInfoDto::getTitle).toList();
 
         // then
         assertThat(result).isNotNull();
         assertThat(result.getTotalElements()).isEqualTo(5);
         assertThat(result.getNumberOfElements()).isEqualTo(4);
-        assertThat(courseTitles).containsExactly("강의1", "강의3", "강의4", "강의2");
+        assertThat(courseTitles).containsExactly("test_강의1", "test_강의3", "test_강의4", "test_강의2");
     }
 
     @Test
     void 자신이_신청한_강의를_최신순으로_조회할_수_있다(){
         // given
-        Member student = memberRepository.findByEmail("student@email.com").get();
+        Member student = memberRepository.findByEmail("student_test@email.com").get();
         Pageable pageable = PageRequest.of(0,4);
 
         // when
@@ -149,13 +198,13 @@ class CustomCourseRepositoryImplTest {
         assertThat(result).isNotNull();
         assertThat(result.getTotalElements()).isEqualTo(5);
         assertThat(result.getNumberOfElements()).isEqualTo(4);
-        assertThat(courseTitles).containsExactly("강의10", "강의9", "강의8", "강의7");
+        assertThat(courseTitles).containsExactly("test_강의10", "test_강의9", "test_강의8", "test_강의7");
     }
 
     @Test
     void 자신이_신청한_강의를_인기순으로_조회할_수_있다(){
         // given
-        Member student = memberRepository.findByEmail("student@email.com").get();
+        Member student = memberRepository.findByEmail("student_test@email.com").get();
         Pageable pageable = PageRequest.of(0,4);
 
         // when
@@ -166,30 +215,30 @@ class CustomCourseRepositoryImplTest {
         assertThat(result).isNotNull();
         assertThat(result.getTotalElements()).isEqualTo(5);
         assertThat(result.getNumberOfElements()).isEqualTo(4);
-        assertThat(courseTitles).containsExactly("강의8", "강의10", "강의9", "강의7");
+        assertThat(courseTitles).containsExactly("test_강의8", "test_강의10", "test_강의9", "test_강의7");
     }
 
     @Test
     void 자신이_신청한_강의를_학생수_순으로_조회할_수_있다(){
         // given
-        Member student = memberRepository.findByEmail("student@email.com").get();
+        Member student = memberRepository.findByEmail("student_test@email.com").get();
         Pageable pageable = PageRequest.of(0,4);
 
         // when
-        Page<CourseInfoDto> result = customCourseRepository.findSignedCourse(student.getId(), CourseOrder.CURRENTSTUDENTS, pageable);
+        Page<CourseInfoDto> result = customCourseRepository.findSignedCourse(student.getId(), CourseOrder.CURRENT, pageable);
         List<String> courseTitles = result.getContent().stream().map(CourseInfoDto::getTitle).toList();
 
         // then
         assertThat(result).isNotNull();
         assertThat(result.getTotalElements()).isEqualTo(5);
         assertThat(result.getNumberOfElements()).isEqualTo(4);
-        assertThat(courseTitles).containsExactly("강의10", "강의8", "강의9", "강의7");
+        assertThat(courseTitles).containsExactly("test_강의10", "test_강의8", "test_강의9", "test_강의7");
     }
 
     @Test
     void 강사는_자신이_개설한_강의를_최신순으로_조회할_수_있다(){
         // given
-        Member instructor = memberRepository.findByEmail("instructor@email.com").get();
+        Member instructor = memberRepository.findByEmail("instructor_test@email.com").get();
         Pageable pageable = PageRequest.of(0,4);
 
         // when
@@ -200,13 +249,13 @@ class CustomCourseRepositoryImplTest {
         assertThat(result).isNotNull();
         assertThat(result.getTotalElements()).isEqualTo(5);
         assertThat(result.getNumberOfElements()).isEqualTo(4);
-        assertThat(courseTitles).containsExactly("강의5", "강의4", "강의3", "강의2");
+        assertThat(courseTitles).containsExactly("test_강의5", "test_강의4", "test_강의3", "test_강의2");
     }
 
     @Test
     void 강사는_자신이_개설한_강의를_인기순으로_조회할_수_있다(){
         // given
-        Member instructor = memberRepository.findByEmail("instructor@email.com").get();
+        Member instructor = memberRepository.findByEmail("instructor_test@email.com").get();
         Pageable pageable = PageRequest.of(0,4);
 
         // when
@@ -217,24 +266,24 @@ class CustomCourseRepositoryImplTest {
         assertThat(result).isNotNull();
         assertThat(result.getTotalElements()).isEqualTo(5);
         assertThat(result.getNumberOfElements()).isEqualTo(4);
-        assertThat(courseTitles).containsExactly("강의3", "강의1", "강의2", "강의5");
+        assertThat(courseTitles).containsExactly("test_강의3", "test_강의1", "test_강의2", "test_강의5");
     }
 
     @Test
     void 강사는_자신이_개설한_강의를_학생수_순으로_조회할_수_있다(){
         // given
-        Member instructor = memberRepository.findByEmail("instructor@email.com").get();
+        Member instructor = memberRepository.findByEmail("instructor_test@email.com").get();
         Pageable pageable = PageRequest.of(0,4);
 
         // when
-        Page<CourseInfoDto> result = customCourseRepository.findManagingCourse(instructor.getId(), CourseOrder.CURRENTSTUDENTS, pageable);
+        Page<CourseInfoDto> result = customCourseRepository.findManagingCourse(instructor.getId(), CourseOrder.CURRENT, pageable);
         List<String> courseTitles = result.getContent().stream().map(CourseInfoDto::getTitle).toList();
 
         // then
         assertThat(result).isNotNull();
         assertThat(result.getTotalElements()).isEqualTo(5);
         assertThat(result.getNumberOfElements()).isEqualTo(4);
-        assertThat(courseTitles).containsExactly("강의1", "강의3", "강의4", "강의2");
+        assertThat(courseTitles).containsExactly("test_강의1", "test_강의3", "test_강의4", "test_강의2");
     }
 
 

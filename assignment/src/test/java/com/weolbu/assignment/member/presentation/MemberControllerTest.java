@@ -12,7 +12,6 @@ import com.weolbu.assignment.member.domain.Member;
 import com.weolbu.assignment.member.domain.repository.MemberRepository;
 import com.weolbu.assignment.member.domain.MemberType;
 import com.weolbu.assignment.member.dto.LoginRequest;
-import com.weolbu.assignment.member.dto.LoginResponse;
 import com.weolbu.assignment.member.dto.MemberJoinRequest;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeAll;
@@ -120,28 +119,28 @@ class MemberControllerTest {
 
         // given
         MemberJoinRequest onlyUpper = new MemberJoinRequest(
-                "학생1", "student@email.com", "010-1234-5678", "PASSWORD", MemberType.STUDENT
+                "학생1", "student_test@email.com", "010-1234-5678", "PASSWORD", MemberType.STUDENT
         );
         MemberJoinRequest onlyLower = new MemberJoinRequest(
-                "학생1", "student@email.com", "010-1234-5678", "password", MemberType.STUDENT
+                "학생1", "student_test@email.com", "010-1234-5678", "password", MemberType.STUDENT
         );
         MemberJoinRequest onlyNumeral = new MemberJoinRequest(
-                "학생1", "student@email.com", "010-1234-5678", "11111111", MemberType.STUDENT
+                "학생1", "student_test@email.com", "010-1234-5678", "11111111", MemberType.STUDENT
         );
         MemberJoinRequest lessThan6 = new MemberJoinRequest(
-                "학생1", "student@email.com", "010-1234-5678", "Passw", MemberType.STUDENT
+                "학생1", "student_test@email.com", "010-1234-5678", "Passw", MemberType.STUDENT
         );
         MemberJoinRequest moreThen10 = new MemberJoinRequest(
-                "학생1", "student@email.com", "010-1234-5678", "Password123", MemberType.STUDENT
+                "학생1", "student_test@email.com", "010-1234-5678", "Password123", MemberType.STUDENT
         );
 
         List<MemberJoinRequest> wrongRequests = List.of(onlyUpper, onlyLower, onlyNumeral, moreThen10, lessThan6);
 
         MemberJoinRequest lengthOf6 = new MemberJoinRequest(
-                "학생1", "student@email.com", "010-1234-5678", "Passwo", MemberType.STUDENT
+                "학생1", "student_test@email.com", "010-1234-5678", "Passwo", MemberType.STUDENT
         );
         MemberJoinRequest lengthOf10 = new MemberJoinRequest(
-                "학생1", "student@email.com", "010-1234-5678", "Password12", MemberType.STUDENT
+                "학생1", "student_test@email.com", "010-1234-5678", "Password12", MemberType.STUDENT
         );
 
         List<MemberJoinRequest> validRequest = List.of(lengthOf6, lengthOf10);
@@ -173,12 +172,9 @@ class MemberControllerTest {
         // given
         LoginRequest request = createLoginRequest();
         JwtToken jwtToken = new JwtToken("Bearer", "accessTokenGenerated", "refreshTokenGenerated");
-        LoginResponse response = new LoginResponse(
-                1L, jwtToken
-        );
         Member member = Member.join(createMemberJoinRequest());
 
-        given(memberService.login(request)).willReturn(response);
+        given(memberService.login(request)).willReturn(jwtToken);
         given(memberRepository.findByEmail(request.email())).willReturn(Optional.of(member));
         given(passwordEncoder.matches(request.password(), member.getPassword())).willReturn(true);
 
@@ -190,12 +186,11 @@ class MemberControllerTest {
                 .andReturn();
 
         // then
-        LoginResponse responseFromMvc = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), LoginResponse.class);
+        JwtToken responseFromMvc = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), JwtToken.class);
         Cookie cookie = mvcResult.getResponse().getCookie("refreshToken");
         assert cookie != null;
 
-        assertThat(responseFromMvc.jwtToken().accessToken()).isEqualTo("accessTokenGenerated");
-        assertThat(responseFromMvc.jwtToken().refreshToken()).isNull();
+        assertThat(responseFromMvc.accessToken()).isEqualTo("accessTokenGenerated");
         assertThat(cookie.getValue()).isEqualTo("refreshTokenGenerated");
 
     }
@@ -247,12 +242,12 @@ class MemberControllerTest {
 
     private MemberJoinRequest createMemberJoinRequest(){
         return new MemberJoinRequest(
-                "학생1", "student@email.com", "010-1234-5678", "Password1", MemberType.STUDENT
+                "학생1", "student_test@email.com", "010-1234-5678", "Password1", MemberType.STUDENT
         );
     }
 
     private LoginRequest createLoginRequest(){
-        return new LoginRequest("student@email.com", "Password1");
+        return new LoginRequest("student_test@email.com", "Password1");
     }
 
 

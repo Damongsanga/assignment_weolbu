@@ -65,20 +65,20 @@ public class ConcurrencyTest {
     @Transactional
     void init(){
         createStudents(threadCount);
-        instructor = memberRepository.save(Member.builder().name("강사").email("instructor@email.com").password("Password").type(MemberType.INSTRUCTOR).build());
+        instructor = memberRepository.save(Member.builder().name("강사").email("instructor_test@email.com").password("Password").type(MemberType.INSTRUCTOR).build());
         course1 = createCourse(3, instructor);
         course2 = createCourse(4, instructor);
     }
 
     private void createStudents(int n) {
         for (int i = 0; i < n; i++) {
-            members.add(Member.builder().name("학생"+i).email("student"+i+"@email.com").password("Password").type(MemberType.STUDENT).build());
+            members.add(Member.builder().name("학생"+i).email("student_test"+i+"@email.com").password("Password").type(MemberType.STUDENT).build());
             memberRepository.save(members.get(i));
         }
     }
 
     private Course createCourse(int maxStudents, Member instructor){
-        Course course = new Course("강의"+maxStudents, 20000, 0, maxStudents , instructor);
+        Course course = new Course("강의_test"+maxStudents, 20000, 0, maxStudents , instructor);
         return courseRepository.save(course);
     }
 

@@ -7,7 +7,6 @@ import com.weolbu.assignment.member.domain.Member;
 import com.weolbu.assignment.member.domain.repository.MemberRepository;
 import com.weolbu.assignment.member.domain.MemberType;
 import com.weolbu.assignment.member.dto.LoginRequest;
-import com.weolbu.assignment.member.dto.LoginResponse;
 import com.weolbu.assignment.member.dto.MemberJoinRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -91,10 +90,10 @@ class MemberServiceTest {
         given(jwtTokenManager.generateToken(any(UsernamePasswordAuthenticationToken.class))).willReturn(jwtToken);
 
         // when
-        LoginResponse response = memberService.login(request);
+        JwtToken response = memberService.login(request);
 
         // then
-        assertThat(response.jwtToken()).isEqualTo(jwtToken);
+        assertThat(response).isEqualTo(jwtToken);
     }
 
     @Test
@@ -141,12 +140,12 @@ class MemberServiceTest {
 
     private MemberJoinRequest createMemberJoinRequest(){
         return new MemberJoinRequest(
-                "학생1", "student@email.com", "010-1234-5678", "Password1", MemberType.STUDENT
+                "학생1", "student_test@email.com", "010-1234-5678", "Password1", MemberType.STUDENT
         );
     }
 
     private LoginRequest createLoginRequest(){
-        return new LoginRequest("student@email.com", "Password1");
+        return new LoginRequest("student_test@email.com", "Password1");
     }
 
 }

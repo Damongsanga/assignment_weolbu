@@ -34,3 +34,7 @@ logging.level:
 
 aes:
   secret-key: A5d_s3$:Q!EK]e6#Up'HNdK(`?7WhE`L
+
+app:
+  data-initializer:
+    enabled: false

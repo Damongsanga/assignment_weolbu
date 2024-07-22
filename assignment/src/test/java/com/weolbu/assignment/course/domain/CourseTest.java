@@ -109,13 +109,13 @@ class CourseTest {
 
     private Member createStudent(){
         MemberJoinRequest request = new MemberJoinRequest(
-                "학생1", "student@email.com", "010-1234-5678", "Password1", MemberType.STUDENT
+                "학생1", "student_test@email.com", "010-1234-5678", "Password1", MemberType.STUDENT
         );
         return Member.join(request);
     }
     private Member createInstructor(){
         MemberJoinRequest request = new MemberJoinRequest(
-                "강사1", "instructor@email.com", "010-8765-4321", "Password2", MemberType.INSTRUCTOR
+                "강사1", "instructor_test@email.com", "010-8765-4321", "Password2", MemberType.INSTRUCTOR
         );
         return Member.join(request);
     }

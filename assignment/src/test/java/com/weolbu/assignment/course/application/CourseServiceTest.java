@@ -44,13 +44,13 @@ class CourseServiceTest {
         Member managingInstructor = mock(Member.class);
         when(managingInstructor.getType()).thenReturn(MemberType.INSTRUCTOR);
 
-        Course course = new Course("강의1", 20000, 0, 30, managingInstructor);
+        Course course = new Course("test_강의1", 20000, 0, 30, managingInstructor);
 
         given(authService.findMemberId()).willReturn(1L);
         given(memberService.findById(1L)).willReturn(managingInstructor);
         given(courseRepository.save(any(Course.class))).willReturn(course);
 
-        CourseCreateRequest request = new CourseCreateRequest("강의1", 30, 20000);
+        CourseCreateRequest request = new CourseCreateRequest("test_강의1", 30, 20000);
 
         // when
         courseService.createCourse(request);
