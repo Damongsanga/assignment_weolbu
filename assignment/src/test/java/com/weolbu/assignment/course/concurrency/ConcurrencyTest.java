@@ -19,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -89,6 +90,7 @@ public class ConcurrencyTest {
         CountDownLatch countDownLatch = new CountDownLatch(threadCount);
         AtomicInteger successCount = new AtomicInteger();
         AtomicInteger failCount = new AtomicInteger();
+
         ConcurrentHashMap<Long, List<Integer>> succeededMemberMap = new ConcurrentHashMap<>();
         succeededMemberMap.put(course1.getId(), new ArrayList<>());
         succeededMemberMap.put(course2.getId(), new ArrayList<>());
@@ -99,9 +101,13 @@ public class ConcurrencyTest {
             executorService.submit(() -> {
                 try {
                     setSecurityContext(members.get(finalI));
+                    System.out.println("members.get(finalI).getId() = " + members.get(finalI).getId());
+                    System.out.println("start");
+
                     // 수강 신청
                     EnrollCourseResponse response = courseService.enrollCourse(new CourseEnrollRequest(List.of(course1.getId(), course2.getId())));
                     // 결과에 따라 success, fail 카운팅. success인 경우 ConcurrentHashMap에 저장하여 실제로 관계가 생성되었는지 확인
+
                     for (EnrollResult result : response.detail()){
                         if (result.isEnrolled()) {
                             successCount.getAndIncrement();
@@ -111,6 +117,8 @@ public class ConcurrencyTest {
                             failCount.getAndIncrement();
                         }
                     }
+                    System.out.println("successCount = " + successCount.get());
+                    System.out.println("failCount = " + failCount.get());
                 } finally {
                     countDownLatch.countDown();
                 }
@@ -141,8 +149,14 @@ public class ConcurrencyTest {
     }
 
     private void setSecurityContext(Member member) {
+        UserDetails userDetails = new org.springframework.security.core.userdetails.User(
+                member.getId().toString(),
+                member.getPassword(),
+                member.getAuthorities()
+        );
+
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-        securityContext.setAuthentication(new TestingAuthenticationToken(member.getId(), null, member.getAuthorities()));
+        securityContext.setAuthentication(new TestingAuthenticationToken(userDetails, null, member.getAuthorities()));
         SecurityContextHolder.setContext(securityContext);
     }
 
