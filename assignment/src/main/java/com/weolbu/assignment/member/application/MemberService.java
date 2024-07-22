@@ -6,7 +6,6 @@ import com.weolbu.assignment.global.exception.BaseException;
 import com.weolbu.assignment.member.domain.Member;
 import com.weolbu.assignment.member.domain.repository.MemberRepository;
 import com.weolbu.assignment.member.dto.LoginRequest;
-import com.weolbu.assignment.member.dto.LoginResponse;
 import com.weolbu.assignment.member.dto.MemberJoinRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,16 +45,11 @@ public class MemberService {
         return memberRepository.existsByEmail(email);
     }
 
-    public LoginResponse login(LoginRequest request) {
+    public JwtToken login(LoginRequest request) {
         Member member = memberRepository.findByEmail(request.email()).orElseThrow(() -> new BaseException(LOGIN_FAIL));
         authenticateLoginRequest(request, member);
 
-        JwtToken jwtToken = createJwtToken(member);
-
-        return new LoginResponse(
-                member.getId(),
-                jwtToken
-        );
+        return createJwtToken(member);
     }
 
     public Member findById(final Long memberId) {

@@ -16,4 +16,6 @@ public interface CourseRepository extends JpaRepository<Course, Long>, CustomCou
             WHERE c.id = :id
             """)
     Optional<Course> findByIdForUpdate(long id);
+
+    boolean existsByTitle(String title);
 }

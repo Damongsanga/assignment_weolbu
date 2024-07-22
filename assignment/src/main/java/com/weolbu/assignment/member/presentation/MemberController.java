@@ -1,8 +1,8 @@
 package com.weolbu.assignment.member.presentation;
 
+import com.weolbu.assignment.auth.dto.JwtToken;
 import com.weolbu.assignment.member.application.MemberService;
 import com.weolbu.assignment.member.dto.LoginRequest;
-import com.weolbu.assignment.member.dto.LoginResponse;
 import com.weolbu.assignment.member.dto.MemberJoinRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,10 +27,10 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(
+    public ResponseEntity<JwtToken> login(
             @Valid @RequestBody LoginRequest request
     ){
-        LoginResponse res = memberService.login(request);
+        JwtToken res = memberService.login(request);
         HttpHeaders headers = getHeadersWithCookie(res);
         return new ResponseEntity<>(res.withNoRefreshToken(), headers, HttpStatus.OK);
     }
@@ -43,8 +43,8 @@ public class MemberController {
         return ResponseEntity.status(CREATED).build();
     }
 
-    private HttpHeaders getHeadersWithCookie(LoginResponse response) {
-        ResponseCookie cookie = ResponseCookie.from("refreshToken", response.jwtToken().refreshToken())
+    private HttpHeaders getHeadersWithCookie(JwtToken jwtToken) {
+        ResponseCookie cookie = ResponseCookie.from("refreshToken", jwtToken.refreshToken())
                 .maxAge(refreshTokenValidityInSeconds)
                 .path("/")
                 .secure(true)

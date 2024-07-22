@@ -11,7 +11,7 @@ public record JwtToken(
          String refreshToken
         ){
 
-    public JwtToken deleteRefreshToken(){
+    public JwtToken withNoRefreshToken(){
         return new JwtToken(this.grantType, this.accessToken, null);
     }
 
