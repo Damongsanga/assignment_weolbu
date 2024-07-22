@@ -10,4 +10,6 @@ public interface CustomCourseRepository {
     Page<CourseInfoDto> findNotSignedCourses(Long memberId, CourseOrder courseOrder, Pageable pageable);
     Page<CourseInfoDto> findSignedCourse(Long memberId, CourseOrder courseOrder, Pageable pageable);
     Page<CourseInfoDto> findManagingCourse(Long memberId, CourseOrder courseOrder, Pageable pageable);
+
+    Page<CourseInfoDto> findAllCourses(CourseOrder order, Pageable pageable);
 }

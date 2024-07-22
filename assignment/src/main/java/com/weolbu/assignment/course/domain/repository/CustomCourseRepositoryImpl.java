@@ -134,13 +134,44 @@ public class CustomCourseRepositoryImpl implements CustomCourseRepository{
         return new PageImpl<>(dtos, pageable, totalCount);
     }
 
+    @Override
+    public Page<CourseInfoDto> findAllCourses(CourseOrder order, Pageable pageable) {
+        JPAQuery<CourseInfoDto> query = jpaQueryFactory.select(
+                        Projections.constructor(
+                                CourseInfoDto.class,
+                                course.id,
+                                course.title,
+                                course.maxStudents,
+                                course.currentStudents,
+                                course.price,
+                                member.name
+                        )
+                )
+                .from(member)
+                .leftJoin(member.managingCourses, course)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize());
+
+        makeOrder(query, order);
+        List<CourseInfoDto> dtos = query.fetch();
+
+        Long total = jpaQueryFactory.select(course.count())
+                .from(member)
+                .leftJoin(member.managingCourses, course)
+                .fetchOne();
+
+        long totalCount = Optional.ofNullable(total).orElse(0L);
+
+        return new PageImpl<>(dtos, pageable, totalCount);
+    }
+
     private void makeOrder(JPAQuery<CourseInfoDto> query, CourseOrder order) {
         switch (order) {
             case LATEST -> query.orderBy(course.createdAt.desc());
             case RATE ->  query.orderBy(new OrderSpecifier<>(Order.DESC, Expressions.numberTemplate(Double.class,
                     "ROUND(({0} * 1.0) / {1}, 5)",
                     course.currentStudents, course.maxStudents)), course.createdAt.desc());
-            case CURRENTSTUDENTS -> query.orderBy(course.currentStudents.desc(), course.createdAt.desc());
+            case CURRENT -> query.orderBy(course.currentStudents.desc(), course.createdAt.desc());
         };
     }
 }

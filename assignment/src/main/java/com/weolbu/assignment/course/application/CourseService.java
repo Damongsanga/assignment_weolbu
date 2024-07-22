@@ -37,8 +37,16 @@ public class CourseService {
     public Long createCourse(CourseCreateRequest request) {
         Long memberId = authService.findMemberId();
         Member member = memberService.findById(memberId);
+
+        if (checkTitleExits(request.title()))
+            throw new BaseException(DUPLICATED_TITLE);
+
         Course course = Course.of(request, member);
         return courseRepository.save(course).getId();
+    }
+
+    public boolean checkTitleExits(String title) {
+        return courseRepository.existsByTitle(title);
     }
 
     public Page<CourseInfoDto> getCourses(CourseFetchType type, CourseOrder order, Pageable pageable) {
@@ -46,6 +54,7 @@ public class CourseService {
 
         Page<CourseInfoDto> courseDtos = Page.empty();
         switch (type) {
+            case ALL -> courseDtos = courseRepository.findAllCourses(order, pageable);
             case UNSIGNED -> courseDtos = courseRepository.findNotSignedCourses(memberId, order, pageable);
             case SIGNED -> courseDtos = courseRepository.findSignedCourse(memberId, order, pageable);
             case MANAGING -> {
