@@ -33,9 +33,15 @@ public class DataInitializer implements CommandLineRunner {
     @Value("spring.security.password.salt")
     private String salt;
 
+    @Value("${app.data-initializer.enabled:true}")
+    private boolean isEnabled;
+
     @Override
     @Transactional
     public void run(String... args) {
+
+        if (!isEnabled) return;
+        System.out.println("running");
 
         Member testMember = memberRepository.save(new Member("학생", passwordEncoder.encode("Password"+salt), "student@email.com", MemberType.STUDENT));
 
@@ -43,8 +49,8 @@ public class DataInitializer implements CommandLineRunner {
             memberRepository.save(new Member("학생"+i, passwordEncoder.encode("Password"+salt), "student"+i+"@email.com", MemberType.STUDENT));
         }
 
-        Member instructor = memberRepository.save(new Member("강사1", "Password", "instructor1"+"@email.com", MemberType.INSTRUCTOR));
-        Member instructor2 = memberRepository.save(new Member("강사2", "Password", "instructor2"+"@email.com", MemberType.INSTRUCTOR));
+        Member instructor = memberRepository.save(new Member("강사1", passwordEncoder.encode("Password"+salt), "instructor1"+"@email.com", MemberType.INSTRUCTOR));
+        Member instructor2 = memberRepository.save(new Member("강사2", passwordEncoder.encode("Password"+salt), "instructor2"+"@email.com", MemberType.INSTRUCTOR));
 
         // 1 ~ 5 번 강의 instructor
         List<Course> courses = Arrays.asList(
