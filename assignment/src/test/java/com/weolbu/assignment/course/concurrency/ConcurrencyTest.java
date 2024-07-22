@@ -6,7 +6,7 @@ import com.weolbu.assignment.course.domain.repository.CourseMemberRepository;
 import com.weolbu.assignment.course.domain.repository.CourseRepository;
 import com.weolbu.assignment.course.dto.CourseEnrollRequest;
 import com.weolbu.assignment.course.dto.EnrollCourseResponse;
-import com.weolbu.assignment.course.dto.EnrollmentResult;
+import com.weolbu.assignment.course.dto.EnrollResult;
 import com.weolbu.assignment.member.application.MemberService;
 import com.weolbu.assignment.member.domain.Member;
 import com.weolbu.assignment.member.domain.repository.MemberRepository;
@@ -102,7 +102,7 @@ public class ConcurrencyTest {
                     // 수강 신청
                     EnrollCourseResponse response = courseService.enrollCourse(new CourseEnrollRequest(List.of(course1.getId(), course2.getId())));
                     // 결과에 따라 success, fail 카운팅. success인 경우 ConcurrentHashMap에 저장하여 실제로 관계가 생성되었는지 확인
-                    for (EnrollmentResult result : response.detail()){
+                    for (EnrollResult result : response.detail()){
                         if (result.isEnrolled()) {
                             successCount.getAndIncrement();
                             succeededMemberMap.get(result.courseId()).add(finalI);
