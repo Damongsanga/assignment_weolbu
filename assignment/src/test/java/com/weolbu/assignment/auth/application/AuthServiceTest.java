@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -23,6 +24,9 @@ class AuthServiceTest {
     @Mock
     private Authentication authentication;
 
+    @Mock
+    private UserDetails userDetails;
+
     @BeforeEach
     void setUp() {
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -32,9 +36,11 @@ class AuthServiceTest {
     void SecurityContextHolder에_등록되어_있는_회원의_정보를_찾아올_수_있다() {
         // given
         long memberId = 1L;
-        given(authentication.getPrincipal()).willReturn(memberId);
+        String memberIdStr = String.valueOf(memberId);
+        given(authentication.getPrincipal()).willReturn(userDetails);
+        given(userDetails.getUsername()).willReturn(memberIdStr);
+
         // when
-        when(authService.findMemberId()).thenReturn(memberId);
         long result = authService.findMemberId();
         // then
         assertThat(result).isEqualTo(memberId);
