@@ -1,8 +1,9 @@
-package com.weolbu.assignment.course.domain;
+package com.weolbu.assignment.course.domain.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.weolbu.assignment.course.domain.repository.CourseRepository;
-import com.weolbu.assignment.course.domain.repository.CustomCourseRepositoryImpl;
+import com.weolbu.assignment.course.domain.Course;
+import com.weolbu.assignment.course.domain.CourseMember;
+import com.weolbu.assignment.course.domain.CourseOrder;
 import com.weolbu.assignment.course.dto.CourseInfoDto;
 import com.weolbu.assignment.global.config.QuerydslConfig;
 import com.weolbu.assignment.member.domain.Member;
