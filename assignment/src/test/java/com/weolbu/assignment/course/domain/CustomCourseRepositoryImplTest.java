@@ -76,10 +76,14 @@ class CustomCourseRepositoryImplTest {
                 new Course("test_강의9", 20000, 2, 10, instructor2),
                 new Course("test_강의10", 20000, 10, 30, instructor2)
         );
-        courses.forEach(em::persist);
 
-        Stream.of(courses.get(4), courses.get(6), courses.get(7), courses.get(8), courses.get(9)).map(c -> new CourseMember(c, student))
-                .forEach(cm -> em.persist(cm));
+
+        Stream.of(courses.get(4), courses.get(6), courses.get(7), courses.get(8), courses.get(9)).forEach(course -> {
+            CourseMember courseMember = new CourseMember(course, student);
+            course.getStudents().add(courseMember);
+        });
+
+        courses.forEach(em::persist);
 
         em.flush();
         em.clear();
